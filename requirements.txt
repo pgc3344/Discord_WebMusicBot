@@ -1,0 +1,6 @@
+discord.py
+Flask
+Flask-SocketIO
+yt-dlp
+requests
+python-dotenv
