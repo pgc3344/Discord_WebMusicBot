@@ -48,6 +48,12 @@ intents = discord.Intents.default()
 intents.message_content = True
 bot = commands.Bot(command_prefix=PREFIX, intents=intents)
 
+# 슬래시 명령어 추가
+@bot.tree.command(name="ping", description="봇의 지연시간을 확인합니다.")
+async def ping_slash(interaction: discord.Interaction):
+    latency = round(bot.latency * 1000)
+    await interaction.response.send_message(f"🏓 **Pong!** `{latency}ms`")
+
 # 음악 재생을 위한 클래스
 class MusicPlayer:
     def __init__(self):
@@ -354,6 +360,13 @@ def toggle_loop(guild_id):
 async def on_ready():
     print(f'{bot.user.name} 준비 완료!')
     await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name=f"{PREFIX}help"))
+    
+    # 슬래시 명령어 동기화
+    try:
+        synced = await bot.tree.sync()
+        print(f"동기화된 슬래시 명령어 수: {len(synced)}")
+    except Exception as e:
+        print(f"슬래시 명령어 동기화 실패: {e}")
 
 @bot.command(name='join', help='음성 채널에 봇을 참가시킵니다.')
 async def join(ctx):
